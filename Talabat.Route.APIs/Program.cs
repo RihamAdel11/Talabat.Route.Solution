@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Talabat.Repositry.Data;
+
 namespace Talabat.Route.APIs
 {
     public class Program
@@ -12,8 +16,14 @@ namespace Talabat.Route.APIs
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddDbContext<StoreContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            }
+            );
             var app = builder.Build();
+         
+           
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
