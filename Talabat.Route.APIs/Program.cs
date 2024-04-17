@@ -32,7 +32,7 @@ namespace Talabat.Route.APIs
             try
             {
                 await _dbContext.Database.MigrateAsync();//update DataBase
-                //await StoreContextSeed.SeedAsync(_dbContext);//Data Seeding
+                await StoreContextSeed.SeedAsync(_dbContext);//Data Seeding
             }
             catch (Exception ex)
             {
