@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositries.Contract;
+using Talabat.Core.Specifications;
+using Talabat.Core.Specifications.ProdectSpec;
 
 namespace Talabat.Route.APIs.Controllers
 {
@@ -18,13 +20,16 @@ namespace Talabat.Route.APIs.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var product = await _productRepo.GetAllAsync();
+            var spec = new ProductWithBrandCategory();
+            var product = await _productRepo.GetAllAsyncWithSpec(spec);
             return Ok(product);
 
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>>GetProduct(int id){
-             var product = await _productRepo.GetAsync(id);
+
+            var spec = new BaseSpecifications<Product>();
+            var product = await _productRepo.GetAsyncWithSpec(spec);
 
         if(product is null)
             {

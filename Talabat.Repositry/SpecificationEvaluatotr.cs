@@ -16,11 +16,12 @@ namespace Talabat.Repositry
             var query = Inputquery;
 
             if (spec.Criteria != null)
-            {
                 query = query.Where(spec.Criteria);
-                query = spec.Includes.Aggregate(query, (CurrentQuery, IncludeExperssion) =>
+
+
+            query = spec.Includes.Aggregate(query, (CurrentQuery, IncludeExperssion) =>
                 CurrentQuery.Include(IncludeExperssion));
-            }
+            
             return query;
         }
 
