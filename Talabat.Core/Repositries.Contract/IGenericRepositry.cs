@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
+using Talabat.Core.Specifications;
 
 namespace Talabat.Core.Repositries.Contract
 {
@@ -12,5 +13,8 @@ namespace Talabat.Core.Repositries.Contract
     {
         Task<T?> GetAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
+
+        Task<T?> GetAsyncWithSpec(ISpecifications<T>spec);
+        Task<IEnumerable<T>> GetAllAsyncWithSpec(ISpecifications<T> spec);
     }
 }
