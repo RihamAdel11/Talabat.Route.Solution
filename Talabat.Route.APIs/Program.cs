@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Talabat.Core.Repositries.Contract;
+using Talabat.Repositry;
 using Talabat.Repositry.Data;
 
 namespace Talabat.Route.APIs
@@ -41,6 +43,7 @@ namespace Talabat.Route.APIs
 
 
             }
+            builder.Services .AddScoped(typeof(IGenericRepositry<>),typeof(GenericRepositry<>));
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
