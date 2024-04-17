@@ -23,6 +23,7 @@ namespace Talabat.Route.APIs
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }
             );
+            builder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
             var app = builder.Build();
 
             using var scope = app.Services.CreateScope();
@@ -43,7 +44,7 @@ namespace Talabat.Route.APIs
 
 
             }
-            builder.Services .AddScoped(typeof(IGenericRepositry<>),typeof(GenericRepositry<>));
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
