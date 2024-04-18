@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Talabat.APIs.Errors;
 using Talabat.Core.Repositries.Contract;
 using Talabat.Repositry;
 using Talabat.Repositry.Data;
@@ -26,6 +28,19 @@ namespace Talabat.Route.APIs
             );
             builder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (actionContext) =>
+                {
+                    var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0).
+                    SelectMany(p => p.Value.Errors).Select(E => E.ErrorMessage).ToList();
+                    var response = new APIValidationErrorResponse()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(response);
+                };
+            });
             var app = builder.Build();
 
             using var scope = app.Services.CreateScope();
