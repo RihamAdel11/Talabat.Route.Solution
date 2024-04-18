@@ -10,7 +10,8 @@ namespace Talabat.Route.APIs.Helpers
         {
             CreateMap<Product, ProductToReturn>().
                   ForMember(d => d.Brand, O => O.MapFrom(s => s.Brand.Name)).
-                ForMember(B => B.Category, o => o.MapFrom(s => s.Category.Name));
+                ForMember(B => B.Category, o => o.MapFrom(s => s.Category.Name)).
+                ForMember(p=>p.PictureUrl,o=>o.MapFrom<ProductPictureUrl>());
               
 
         }
