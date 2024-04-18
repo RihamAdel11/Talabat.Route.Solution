@@ -9,14 +9,15 @@ namespace Talabat.Core.Specifications.ProdectSpec
 {
    public class ProductWithBrandCategory:BaseSpecifications <Product>
     {
-       
-        //public ProductWithBrandCategory(int id) : base(
-        //    p => p.Id == id)
-        //{
-        //    Includes.Add(p => p.Brand);
-        //    Includes.Add(p => p.Category);
-        //}
+
+
         public ProductWithBrandCategory():base()
+        {
+            Includes.Add(p => p.Brand);
+            Includes.Add(p => p.Category);
+        }
+        public ProductWithBrandCategory(int id) : base(
+    p => p.Id == id)
         {
             Includes.Add(p => p.Brand);
             Includes.Add(p => p.Category);
