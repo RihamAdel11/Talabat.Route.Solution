@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Text.Json;
-using Talabat.APIs.Errors;
+using Talabat.Route.APIs.Errors;
 
-namespace Talabat.APIs.MiddleWare
+namespace Talabat.Route.APIs.MiddleWare
 {//Convension
     public class ExceptionMiddelware 
     {

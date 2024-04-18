@@ -1,6 +1,7 @@
 ﻿using Talabat.Route.APIs.Errors;
 
-namespace Talabat.APIs.Errors
+
+namespace Talabat.Route.APIs.Errors
 {
     public class APIValidationErrorResponse:APIResponse 
     {

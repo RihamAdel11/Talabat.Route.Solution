@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Talabat.Route.APIs.Errors;
-
-namespace Talabat.APIs.Errors
+namespace Talabat.Route.APIs.Errors
 {
     public class APiExceptionResponse:APIResponse
     {
