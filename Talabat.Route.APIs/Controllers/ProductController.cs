@@ -7,6 +7,7 @@ using Talabat.Core.Repositries.Contract;
 using Talabat.Core.Specifications;
 using Talabat.Core.Specifications.ProdectSpec;
 using Talabat.Route.APIs.DTOs;
+using Talabat.Route.APIs.Errors;
 
 namespace Talabat.Route.APIs.Controllers
 {
@@ -31,6 +32,8 @@ namespace Talabat.Route.APIs.Controllers
             return Ok(_mapper.Map<IEnumerable < Product>,IEnumerable < ProductToReturn>>(product));
 
         }
+        [ProducesResponseType(typeof(ProductToReturn), 200)]
+        [ProducesResponseType(typeof(APIResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductToReturn >>GetProduct(int id){
 
