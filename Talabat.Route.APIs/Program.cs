@@ -56,6 +56,7 @@ namespace Talabat.Route.APIs
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 
