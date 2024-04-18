@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Talabat.Core.Repositries.Contract;
 using Talabat.Repositry;
 using Talabat.Repositry.Data;
+using Talabat.Route.APIs.Helpers;
 
 namespace Talabat.Route.APIs
 {
@@ -24,6 +25,7 @@ namespace Talabat.Route.APIs
             }
             );
             builder.Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
             var app = builder.Build();
 
             using var scope = app.Services.CreateScope();
