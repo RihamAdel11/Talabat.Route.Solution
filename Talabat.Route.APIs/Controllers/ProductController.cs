@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.Core.Entities;
@@ -22,6 +23,7 @@ namespace Talabat.Route.APIs.Controllers
             _mapper = mapper;
         }
         [HttpGet]
+    
         public async Task<ActionResult<IEnumerable<ProductToReturn >>> GetProducts()
         {
             var spec = new ProductWithBrandCategory();

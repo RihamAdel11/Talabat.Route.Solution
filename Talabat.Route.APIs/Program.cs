@@ -66,10 +66,11 @@ namespace Talabat.Route.APIs
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+               
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseStatusCodePagesWithRedirects("/errors/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
