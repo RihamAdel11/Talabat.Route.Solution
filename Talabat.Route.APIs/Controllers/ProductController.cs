@@ -53,13 +53,13 @@ namespace Talabat.Route.APIs.Controllers
             return Ok(_mapper.Map<Product,ProductToReturn>(product));
                 }
 		[HttpGet("brands")]
-		public async Task<ActionResult<IEnumerable <ProductBrand>>> GetBrands()
+		public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetBrands()
 		{
 			var brands = await _brandRepo.GetAllAsync();
 			return Ok(brands);
 		}
 		[HttpGet("Categories")]
-		public async Task<ActionResult<IEnumerable <ProductCategory>>> GetCategoris()
+		public async Task<ActionResult<IReadOnlyList<ProductCategory>>> GetCategoris()
 		{
 			var Categories = await _brandRepo.GetAllAsync();
 			return Ok(Categories);
