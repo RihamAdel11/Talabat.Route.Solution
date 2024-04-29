@@ -7,6 +7,7 @@ using Talabat.Core.Repositries.Contract;
 using Talabat.Repositry;
 using Talabat.Repositry.Data;
 using Talabat.Route.APIs.Helpers;
+using StackExchange.Redis;
 
 namespace Talabat.Route.APIs
 {
@@ -27,7 +28,13 @@ namespace Talabat.Route.APIs
             }
             );
            builder.Services.AddAplicationServices();
-            var app = builder.Build();
+			builder.Services.AddSingleton<IConnectionMultiplexer>((ServiceProvider) =>
+			{
+				var connection = builder.Configuration.GetConnectionString("Redis");
+				return ConnectionMultiplexer.Connect(connection);
+
+			});
+			var app = builder.Build();
 
             using var scope = app.Services.CreateScope();
 
