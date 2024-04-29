@@ -14,7 +14,7 @@ namespace Talabat.Route.APIs.Extentions
         public static IServiceCollection  AddAplicationServices( this IServiceCollection Services)
         {
             Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
-            Services.AddAutoMapper(m => m.AddProfile(new MappingProfile()));
+            Services.AddAutoMapper(typeof(MappingProfile).Assembly);
             Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (actionContext) =>

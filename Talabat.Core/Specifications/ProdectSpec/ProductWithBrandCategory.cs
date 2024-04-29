@@ -11,10 +11,27 @@ namespace Talabat.Core.Specifications.ProdectSpec
     {
 
 
-        public ProductWithBrandCategory():base()
+        public ProductWithBrandCategory(ProductSpecParams specparams) :base(p=>
+        (!specparams.BrandId .HasValue ||p.BrandId== specparams.BrandId.Value)&&(!specparams.CategoryId .HasValue ||p.CategoryId==specparams.CategoryId .Value ))
         {
             Includes.Add(p => p.Brand);
             Includes.Add(p => p.Category);
+            if(!string.IsNullOrEmpty(specparams.Sort)) {
+                switch(specparams.Sort)
+                {
+                    case "priceAsc":
+                        AddOrderBy(p => p.Price); break;
+                    case "priceDesc":
+                        AddOrderBy(p => p.Price); break;
+                    default:
+                        AddOrderBy (p=>p.Name ); break; 
+                }
+            }
+            else
+            {
+                AddOrderBy(p => p.Name);
+            }
+            ApplyPagination((specparams .PageIndex -1)*specparams.pagesize ,specparams .pagesize );
         }
         public ProductWithBrandCategory(int id) : base(
     p => p.Id == id)
@@ -22,5 +39,6 @@ namespace Talabat.Core.Specifications.ProdectSpec
             Includes.Add(p => p.Brand);
             Includes.Add(p => p.Category);
         }
+
     }
 }

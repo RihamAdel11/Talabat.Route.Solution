@@ -20,7 +20,7 @@ namespace Talabat.Repositry
             _dbContext = dbContext;
         }
         
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IReadOnlyList <T>> GetAllAsync()
         {
             //if (typeof(T) == typeof(Product))
             //    return (IEnumerable < T >) await _dbContext.Set<Product>().Include(p => p.Brand).Include(p => p.Category).ToListAsync();
@@ -45,7 +45,7 @@ namespace Talabat.Repositry
             return await ApplaySpecification(spec).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsyncWithSpec(ISpecifications<T> spec)
+        public async Task<IReadOnlyList <T>> GetAllAsyncWithSpec(ISpecifications<T> spec)
         {
             return await ApplaySpecification(spec).ToListAsync();
         }
@@ -54,5 +54,10 @@ namespace Talabat.Repositry
             return SpecificationEvaluatotr<T>.GetQuery(_dbContext.Set<T>(), Spec);
 
         }
-    }
+
+		public async Task<int> GetCountAsync(ISpecifications<T> spec)
+		{
+			return await ApplaySpecification (spec).CountAsync ();
+		}
+	}
 }

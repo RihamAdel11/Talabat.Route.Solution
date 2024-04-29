@@ -4,17 +4,19 @@ using Talabat.Route.APIs.DTOs;
 
 namespace Talabat.Route.APIs.Helpers
 {
-    public class MappingProfile:Profile 
+    public class MappingProfile:Profile  
     {
         public MappingProfile()
         {
-            CreateMap<Product, ProductToReturn>().
-                  ForMember(d => d.Brand, O => O.MapFrom(s => s.Brand.Name)).
-                ForMember(B => B.Category, o => o.MapFrom(s => s.Category.Name)).
-                ForMember(p=>p.PictureUrl,o=>o.MapFrom<ProductPictureUrl>());
-              
+			CreateMap<Product, ProductToReturn>().
+			   ForMember(d => d.Brand, O => O.MapFrom(s => s.Brand.Name)).
+			   ForMember(B => B.Category, o => o.MapFrom(s => s.Category.Name)).
+			   ForMember(d => d.PictureUrl, O => O.MapFrom<ProductPictureUrl>());
+			//CreateMap<CustomerBasketDto, CustomerBasket>();
+			//CreateMap<BasketItemDto, BasketItem>();
 
-        }
+
+		}
 
     }
 }

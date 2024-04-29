@@ -8,6 +8,7 @@ using Talabat.Core.Specifications;
 using Talabat.Core.Specifications.ProdectSpec;
 using Talabat.Route.APIs.DTOs;
 using Talabat.Route.APIs.Errors;
+using Talabat.Route.APIs.Helpers;
 
 namespace Talabat.Route.APIs.Controllers
 {
@@ -30,19 +31,24 @@ namespace Talabat.Route.APIs.Controllers
         }
         [HttpGet]
     
-        public async Task<ActionResult<IEnumerable<ProductToReturn >>> GetProducts()
+        public async Task<ActionResult<Pagination <ProductToReturn >>> GetProducts([FromQuery] ProductSpecParams specparams)
         {
-            var spec = new ProductWithBrandCategory();
+            var spec = new ProductWithBrandCategory(specparams);
             var product = await _productRepo.GetAllAsyncWithSpec(spec);
-            return Ok(_mapper.Map<IEnumerable < Product>,IEnumerable < ProductToReturn>>(product));
+
+			var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturn>>(product);
+			var countspec = new ProductWithFilterationForCount(specparams);
+			var count = await _productRepo.GetCountAsync(countspec);
+			return Ok(new Pagination<ProductToReturn>(specparams.PageIndex , specparams.pagesize , count, data));
 
         }
         [ProducesResponseType(typeof(ProductToReturn), 200)]
         [ProducesResponseType(typeof(APIResponse), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductToReturn >>GetProduct(int id){
+        public async Task<ActionResult<ProductToReturn >>GetProduct(int id)
+		{
 
-            var spec = new ProductWithBrandCategory();
+            var spec = new ProductWithBrandCategory(id);
             var product = await _productRepo.GetAsyncWithSpec(spec);
 
         if(product is null)
