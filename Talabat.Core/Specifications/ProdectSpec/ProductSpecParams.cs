@@ -10,6 +10,13 @@ namespace Talabat.Core.Specifications.ProdectSpec
 	{
 		private const int MaxCountSize = 10;
         private int PageSize=5;
+		private string search;
+
+		public string? Search
+		{
+			get { return search; }
+			set { search = value?.ToLower(); }
+		}
 
 		public int pagesize
 		{
