@@ -9,6 +9,8 @@ using Talabat.Repositry.Data;
 using Talabat.Route.APIs.Helpers;
 using StackExchange.Redis;
 using Talabat.Repositry.Identity;
+using Microsoft.AspNetCore.Identity;
+using Talabat.Core.Entities.Identity;
 
 namespace Talabat.Route.APIs
 {
@@ -39,6 +41,14 @@ namespace Talabat.Route.APIs
 				return ConnectionMultiplexer.Connect(connection);
 
 			});
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                //options.Password.RequiredUniqueChars = 2;
+                //options.Password.RequireDigit = true;
+                //options.Password.RequireUppercase = true;
+                //options.Password.RequireLowercase = true;
+            }).
+            AddEntityFrameworkStores <ApplicationIdentityDbContext>();
 			var app = builder.Build();
 
             using var scope = app.Services.CreateScope();
@@ -50,9 +60,13 @@ namespace Talabat.Route.APIs
             try
             {
                 await _dbContext.Database.MigrateAsync();//update DataBase
-				await _IdentitydbContext.Database.MigrateAsync();
 				await StoreContextSeed.SeedAsync(_dbContext);//Data Seeding
-            }
+				await _IdentitydbContext.Database.MigrateAsync();
+                var _usermanager = servies.GetRequiredService<UserManager<ApplicationUser>>();
+               
+                await ApplicationIdentityDataSeed.SeedUserAsync(_usermanager);
+
+			}
             catch (Exception ex)
             {
                 var logger = loggerFactory.CreateLogger<Program>();
