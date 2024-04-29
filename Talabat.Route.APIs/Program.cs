@@ -8,6 +8,7 @@ using Talabat.Repositry;
 using Talabat.Repositry.Data;
 using Talabat.Route.APIs.Helpers;
 using StackExchange.Redis;
+using Talabat.Repositry.Identity;
 
 namespace Talabat.Route.APIs
 {
@@ -28,6 +29,10 @@ namespace Talabat.Route.APIs
             }
             );
            builder.Services.AddAplicationServices();
+            builder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
 			builder.Services.AddSingleton<IConnectionMultiplexer>((ServiceProvider) =>
 			{
 				var connection = builder.Configuration.GetConnectionString("Redis");
@@ -40,12 +45,13 @@ namespace Talabat.Route.APIs
 
             var servies = scope.ServiceProvider;
             var _dbContext = servies.GetRequiredService<StoreContext>();
-
-            var loggerFactory = servies.GetRequiredService<ILoggerFactory>();
+			var _IdentitydbContext = servies.GetRequiredService<ApplicationIdentityDbContext>();
+			var loggerFactory = servies.GetRequiredService<ILoggerFactory>();
             try
             {
                 await _dbContext.Database.MigrateAsync();//update DataBase
-                await StoreContextSeed.SeedAsync(_dbContext);//Data Seeding
+				await _IdentitydbContext.Database.MigrateAsync();
+				await StoreContextSeed.SeedAsync(_dbContext);//Data Seeding
             }
             catch (Exception ex)
             {
