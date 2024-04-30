@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,14 @@ namespace Talabat.Route.APIs.Controllers
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly IAuthServices _authServices;
+		private readonly IMapper _mapper;
 
-		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,IAuthServices authServices)
+		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAuthServices authServices, IMapper mapper)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_authServices = authServices;
+			_mapper = mapper;
 		}
 		[HttpPost("Login")]
 		public async Task<ActionResult<UserDto>> Login(LoginDto model)
@@ -33,13 +36,13 @@ namespace Talabat.Route.APIs.Controllers
 			if (user is null) return Unauthorized(new APIResponse(401, "Invalid Login"));
 			var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 			if (!result.Succeeded) return Unauthorized(new APIResponse(401, "Invalid Login"));
-			
+
 			return Ok(new UserDto()
 
 			{
 				DisplayName = user.DisplayName,
 				Email = user.Email,
-				Token = await _authServices .CreateTokenAsync (user,_userManager )
+				Token = await _authServices.CreateTokenAsync(user, _userManager)
 			});
 
 
@@ -69,15 +72,15 @@ namespace Talabat.Route.APIs.Controllers
 			{
 				DisplayName = user.DisplayName,
 				Email = user.Email,
-				Token =  await _authServices.CreateTokenAsync(user, _userManager)
+				Token = await _authServices.CreateTokenAsync(user, _userManager)
 			});
 		}
-		[Authorize ]
+		[Authorize]
 		[HttpGet]
-		public async Task<ActionResult <UserDto>> GetCurrentUser()
+		public async Task<ActionResult<UserDto>> GetCurrentUser()
 		{
 			var email = User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
-			var user=await _userManager .FindByEmailAsync(email);
+			var user = await _userManager.FindByEmailAsync(email);
 			return Ok(new UserDto()
 			{
 				DisplayName = user?.DisplayName ?? string.Empty,
@@ -87,12 +90,32 @@ namespace Talabat.Route.APIs.Controllers
 		}
 		[Authorize]
 		[HttpGet("Address")]
-		public async Task<ActionResult<UserDto>> GetUserAddress()
+		public async Task<ActionResult<AddressDto>> GetUserAddress()
 		{
 			var user = await _userManager.FindUserWithAddressByEmail(User);
-			return Ok(user.Address);
+			return Ok(_mapper.Map<AddressDto>(user.Address));
 
 		}
+		[Authorize]
+		[HttpGet("Address")]
+		public async Task<ActionResult<Address>> UpdateUserAddress(AddressDto address)
+		{
+			var updatAddres = _mapper.Map<Address>(address);
+			var user = await _userManager.FindUserWithAddressByEmail(User);
+			updatAddres.Id = user.Address.Id;
+			user.Address = updatAddres;
+			var res = await _userManager.UpdateAsync(user);
+			if (!res.Succeeded)
+			{
+				return BadRequest(new APIValidationErrorResponse()
+				{
+					Errors = res.Errors.Select(E => E.Description)
+				});
+
+			}
+			return Ok(address);
+
 		}
+	}
 }
 
