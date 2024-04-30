@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using Talabat.Core.Entities.Identity;
+using Talabat.Core.Services.Contract;
 using Talabat.Route.APIs.DTOs;
 using Talabat.Route.APIs.Errors;
 
@@ -14,11 +15,13 @@ namespace Talabat.Route.APIs.Controllers
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
+		private readonly IAuthServices _authServices;
 
-		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+		public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,IAuthServices authServices)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_authServices = authServices;
 		}
 		[HttpPost("Login")]
 		public async Task<ActionResult<UserDto>> Login(LoginDto model)
@@ -40,7 +43,7 @@ namespace Talabat.Route.APIs.Controllers
 			{
 				DisplayName = user.DisplayName,
 				Email = user.Email,
-				Token = "this will be token"
+				Token = await _authServices .CreateTokenAsync (user,_userManager )
 			});
 
 
@@ -66,10 +69,11 @@ namespace Talabat.Route.APIs.Controllers
 			}
 			return Ok(new UserDto()
 
+
 			{
 				DisplayName = user.DisplayName,
 				Email = user.Email,
-				Token = "this will be token"
+				Token =  await _authServices.CreateTokenAsync(user, _userManager)
 			});
 		}
 	}
