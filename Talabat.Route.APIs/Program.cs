@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Identity;
 using Talabat.Core.Entities.Identity;
 using Talabat.Core.Services.Contract;
 using Talabat.Services.AuthServices;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Talabat.Route.APIs
 {
@@ -33,7 +36,7 @@ namespace Talabat.Route.APIs
             }
             );
            builder.Services.AddAplicationServices();
-            builder.Services.AddScoped(typeof(IAuthServices), typeof(AuthService)); ;
+            builder.Services.AddScoped(typeof(IAuthServices), typeof(AuthService)); 
             builder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
@@ -52,6 +55,24 @@ namespace Talabat.Route.APIs
                 //options.Password.RequireLowercase = true;
             }).
             AddEntityFrameworkStores <ApplicationIdentityDbContext>();
+            builder.Services.AddAuthentication(options => { 
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultForbidScheme= JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuser"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWT:MySecuredAPIUser"],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:AuthKey"] ?? string.Empty))
+                ,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                };
+            });
 			var app = builder.Build();
 
             using var scope = app.Services.CreateScope();

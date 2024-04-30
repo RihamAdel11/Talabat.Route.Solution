@@ -27,17 +27,10 @@ namespace Talabat.Route.APIs.Controllers
 		public async Task<ActionResult<UserDto>> Login(LoginDto model)
 		{
 			var user = await _userManager.FindByEmailAsync(model.Email);
-			if (user == null)
-			{
-				return Unauthorized(new APIResponse(401, "Invalid Login"));
-
-
-			}
+			if (user is null) return Unauthorized(new APIResponse(401, "Invalid Login"));
 			var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-			if (!result.Succeeded)
-			{
-				return Unauthorized(new APIResponse(401, "Invalid Login"));
-			}
+			if (!result.Succeeded) return Unauthorized(new APIResponse(401, "Invalid Login"));
+			
 			return Ok(new UserDto()
 
 			{
@@ -73,7 +66,7 @@ namespace Talabat.Route.APIs.Controllers
 			{
 				DisplayName = user.DisplayName,
 				Email = user.Email,
-				Token =  await _authServices.CreateTokenAsync(user, _userManager)
+				Token =  /*await _authServices.CreateTokenAsync(user, _userManager)*/"tyhgj"
 			});
 		}
 	}

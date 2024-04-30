@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ namespace Talabat.Route.APIs.Controllers
             _brandRepo = BrandRepo;
         }
         [HttpGet]
+        [Authorize]
     
         public async Task<ActionResult<Pagination <ProductToReturn >>> GetProducts([FromQuery] ProductSpecParams specparams)
         {
