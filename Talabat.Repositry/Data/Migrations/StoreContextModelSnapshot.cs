@@ -62,7 +62,7 @@ namespace Talabat.Repositry.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DeliveryMethodId")
+                    b.Property<int?>("DeliveryMethodId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("OrderTime")
@@ -188,8 +188,7 @@ namespace Talabat.Repositry.Data.Migrations
                     b.HasOne("Talabat.Core.Entities.Order_Aggregate.DeliveryMethod", "DeliveryMethod")
                         .WithMany()
                         .HasForeignKey("DeliveryMethodId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.OwnsOne("Talabat.Core.Entities.Order_Aggregate.Address", "ShippingAddress", b1 =>
                         {

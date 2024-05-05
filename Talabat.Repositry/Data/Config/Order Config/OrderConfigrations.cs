@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Talabat.Repositry.Data.Config.Order_Config
 			builder.Property(order => order.Status).HasConversion(
 				(ostatus) => ostatus.ToString(),
 				(ostatus) =>(OrderStatus)Enum.Parse(typeof(OrderStatus), ostatus));
-			//builder.HasOne(order => order.DeliveryMethod).WithOne();
+			//builder.HasOne(order => order.DeliveryMethod).WithOne(); 
 			//builder.HasIndex ("DeliveryMethodId").IsUnique(true);
 			builder.Property(order => order.SubTotal).HasColumnType("decimal(12,2)");
 			builder.HasOne(order => order.DeliveryMethod).WithMany().OnDelete(DeleteBehavior.SetNull);

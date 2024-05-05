@@ -15,7 +15,7 @@ namespace Talabat.Route.APIs.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class AccountController : ControllerBase
+	public class AccountController : BaseAPIController 
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
@@ -75,7 +75,9 @@ namespace Talabat.Route.APIs.Controllers
 				Token = await _authServices.CreateTokenAsync(user, _userManager)
 			});
 		}
-		[Authorize]
+
+		
+		[Authorize] 
 		[HttpGet]
 		public async Task<ActionResult<UserDto>> GetCurrentUser()
 		{
@@ -89,7 +91,7 @@ namespace Talabat.Route.APIs.Controllers
 			});
 		}
 		[Authorize]
-		[HttpGet("Address")]
+		[HttpGet("address")]
 		public async Task<ActionResult<AddressDto>> GetUserAddress()
 		{
 			var user = await _userManager.FindUserWithAddressByEmail(User);
@@ -97,7 +99,7 @@ namespace Talabat.Route.APIs.Controllers
 
 		}
 		[Authorize]
-		[HttpGet("Address")]
+		[HttpPut("address")]
 		public async Task<ActionResult<Address>> UpdateUserAddress(AddressDto address)
 		{
 			var updatAddres = _mapper.Map<Address>(address);

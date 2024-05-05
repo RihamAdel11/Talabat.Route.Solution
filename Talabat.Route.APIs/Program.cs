@@ -16,6 +16,7 @@ using Talabat.Services.AuthServices;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
 
 namespace Talabat.Route.APIs
 {
@@ -27,9 +28,12 @@ namespace Talabat.Route.APIs
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddNewtonsoftJson (Options =>
+            {
+                Options.SerializerSettings.ReferenceLoopHandling  = ReferenceLoopHandling.Ignore;
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-           builder.Services.AddSwagerServices();
+            builder.Services.AddSwagerServices();
             builder.Services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

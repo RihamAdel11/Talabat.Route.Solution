@@ -41,7 +41,7 @@ namespace Talabat.Repositry.Data.Migrations
                     ShippingAddress_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShippingAddress_Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShippingAddress_Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeliveryMethodId = table.Column<int>(type: "int", nullable: false),
+                    DeliveryMethodId = table.Column<int>(type: "int", nullable: true),
                     SubTotal = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     PaymentIntendId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
