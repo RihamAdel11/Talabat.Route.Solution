@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.Order_Aggregate;
 
 namespace Talabat.Repositry.Data
 {
@@ -22,5 +23,9 @@ namespace Talabat.Repositry.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductBrand> ProductBrands { get; set; }
         public DbSet<ProductCategory> ProductCategory { get; set; }
-    }
+        public DbSet<Order>Orders{ get; set; }
+		public DbSet<OrderItem> OrderItems{ get; set; }
+		public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+
+	}
 }
