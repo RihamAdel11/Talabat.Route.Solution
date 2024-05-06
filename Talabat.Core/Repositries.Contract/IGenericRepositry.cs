@@ -1,4 +1,4 @@
-﻿using System;
+﻿  using System;
 using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +17,9 @@ namespace Talabat.Core.Repositries.Contract
         Task<T?> GetAsyncWithSpec(ISpecifications<T>spec);
         Task<IReadOnlyList <T>> GetAllAsyncWithSpec(ISpecifications<T> spec);
         Task<int> GetCountAsync(ISpecifications<T> spec);
+        void Add(T entity);
+       
+        void Delete(T entity);
+        void Update(T entity);
     }
 }
