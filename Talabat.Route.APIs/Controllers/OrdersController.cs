@@ -34,8 +34,18 @@ namespace Talabat.Route.APIs.Controllers
 		[HttpGet]
 		public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser(string email)
 		{
-			var orders=await _orderservices .GetOrderForUserAsync(email);
+			var orders = await _orderservices.GetOrderForUserAsync(email);
 			return Ok(orders);
 		}
+		[ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(APIResponse), StatusCodes.Status404NotFound)]
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Order>> GetOrderForUser(int id, string email)
+		{
+			var order = await _orderservices.GetOrderByIdForUserAsync(id, email);
+			if (order is null) return NotFound(new APIResponse(404));
+			return Ok(order);
+		}
+
 	}
 }
