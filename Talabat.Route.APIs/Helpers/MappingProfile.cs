@@ -20,7 +20,14 @@ namespace Talabat.Route.APIs.Helpers
 			
 			CreateMap<Address, AddressDto>();
 			//CreateMap<Address, AddressDto>().ReverseMap();
-
+			CreateMap<Order,OrderToReturnDto>().ForMember(d=>d.DeliveryMethod,O=>O.MapFrom (s=>s.DeliveryMethod .ShortName ) ).
+				ForMember(d => d.DeliveryMethodCost, O => O.MapFrom(s => s.DeliveryMethod.Cost));
+			
+			CreateMap<OrderItem, OrderItemDto>().
+				ForMember(d => d.ProductId, O => O.MapFrom(s => s.Product.ProductId))
+				.ForMember(d => d.ProductName, O => O.MapFrom(s => s.Product.ProductName)).
+				   ForMember(d => d.PictureUrl , O => O.MapFrom(s => s.Product.PictureUrl )).
+					ForMember(d => d.PictureUrl, O => O.MapFrom<OrderItemPictureUrlResolver>());
 
 		}
 
