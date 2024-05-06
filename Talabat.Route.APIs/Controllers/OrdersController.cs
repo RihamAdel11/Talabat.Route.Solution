@@ -29,13 +29,13 @@ namespace Talabat.Route.APIs.Controllers
 			var address = _mapper.Map<AddressDto, Address>(orderDto.ShippingAddress);
 			var order = await _orderservices.CreateOrderAsync(orderDto.BuyerEmail, orderDto.BasketId, address, orderDto.DeliveryMethodId);
 			if (order is null) return BadRequest(new APIResponse(400));
-			return Ok(_mapper.Map<Order,OrderToReturnDto>(order));
+			return Ok(_mapper.Map<Order, OrderToReturnDto>(order));
 		}
 		[HttpGet]
 		public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetOrdersForUser(string email)
 		{
 			var orders = await _orderservices.GetOrderForUserAsync(email);
-			return Ok(_mapper.Map<IReadOnlyList<Order>,IReadOnlyList<OrderToReturnDto>>(orders));
+			return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<OrderToReturnDto>>(orders));
 		}
 		[ProducesResponseType(typeof(OrderToReturnDto), StatusCodes.Status200OK)]
 		[ProducesResponseType(typeof(APIResponse), StatusCodes.Status404NotFound)]
@@ -46,6 +46,12 @@ namespace Talabat.Route.APIs.Controllers
 			if (order is null) return NotFound(new APIResponse(404));
 			return Ok(_mapper.Map<Order, OrderToReturnDto>(order));
 		}
-
+		[Authorize]
+		[HttpGet("deliveryMethods")]
+		public async Task<ActionResult<IReadOnlyList <DeliveryMethod >>> GetDeliveryMethods()
+		{
+			var deliveryMethod = await _orderservices.GetDeliveryMethodAsync();
+			return Ok(deliveryMethod);
+		}
 	}
 }
