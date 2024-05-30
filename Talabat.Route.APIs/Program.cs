@@ -39,6 +39,7 @@ namespace Talabat.Route.APIs
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }
             );
+            builder.Services.AddCors(options => { options.AddPolicy("MyPolicy", policyOptions => { policyOptions.AllowAnyHeader().AllowAnyMethod().WithOrigins(builder.Configuration["FrontBaseUrl"]); }); });
            builder.Services.AddAplicationServices();
             builder.Services.AddScoped(typeof(IAuthServices), typeof(AuthService)); 
             builder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
@@ -120,7 +121,7 @@ namespace Talabat.Route.APIs
 
             app.UseAuthorization();
 
-
+            app.UseCors("MyPolicy");
             app.MapControllers();
 
             app.Run();
