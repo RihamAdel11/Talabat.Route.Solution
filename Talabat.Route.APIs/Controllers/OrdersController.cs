@@ -11,6 +11,8 @@ namespace Talabat.Route.APIs.Controllers
 	[Route("api/[controller]")]
 	[ApiController]
 	[ApiExplorerSettings(IgnoreApi = true)]
+	//[ApiExplorerSettings(IgnoreApi = true)]
+	
 	
 	[Authorize]
 	public class OrdersController : BaseAPIController
