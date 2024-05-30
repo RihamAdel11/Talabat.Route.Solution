@@ -72,6 +72,26 @@ namespace Talabat.Services.OrderServices
 
 
 		}
+		public async Task<Order?> UpdateOrderStatus(string paymentIntentId, bool isPaid)
+		{
+			var orderRepo = _unitofwork.Repositry<Order>();
+			var spec = new OrderWithPaymentIntentSpecifications(paymentIntentId);
+
+			var order = await orderRepo.GetAsyncWithSpec(spec);
+
+			if (order is null) return null;
+
+			if (isPaid)
+				order.Status = OrderStatus.PaymentReceived;
+			else
+				order.Status = OrderStatus.PaymentFailed;
+
+			orderRepo.Update(order);
+
+			await _unitofwork.CompleteAsync();
+
+			return order;
+		}
 
 		public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodAsync()
 		=> await _unitofwork.Repositry<DeliveryMethod>().GetAllAsync();
@@ -93,4 +113,5 @@ namespace Talabat.Services.OrderServices
 
 		}
 	}
+	
 }
