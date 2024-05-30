@@ -9,6 +9,8 @@ using Talabat.Core;
 using Talabat.Core.Services.Contract;
 using Talabat.Services.OrderServices;
 using Talabat.Services.PaymentServices;
+using Stripe;
+using Talabat.Services.CacheService;
 
 
 namespace Talabat.Route.APIs.Extentions
@@ -17,6 +19,7 @@ namespace Talabat.Route.APIs.Extentions
     {
         public static IServiceCollection  AddAplicationServices( this IServiceCollection Services)
 		{
+			Services.AddSingleton(typeof(IResponseCacheService), typeof(ResponseCacheService));
 			Services.AddScoped(typeof(IPaymentServices), typeof(PaymentServices));
 			Services.AddScoped(typeof(IOrderServices), typeof(OrderServices));
 			Services.AddScoped(typeof(IProductServices ), typeof(IProductServices ));

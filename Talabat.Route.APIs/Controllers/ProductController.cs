@@ -34,8 +34,8 @@ namespace Talabat.Route.APIs.Controllers
         }
         [HttpGet]
         [Authorize]
-    
-        public async Task<ActionResult<Pagination <ProductToReturn >>> GetProducts([FromQuery] ProductSpecParams specparams)
+		[CachedAttribute(600)]
+		public async Task<ActionResult<Pagination <ProductToReturn >>> GetProducts([FromQuery] ProductSpecParams specparams)
         {
          
             var product = await _productServices .GetProductsAsync(specparams);
