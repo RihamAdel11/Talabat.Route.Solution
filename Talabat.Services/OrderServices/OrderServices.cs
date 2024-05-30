@@ -16,13 +16,14 @@ namespace Talabat.Services.OrderServices
 	{
 		private readonly IBasketRepositry _basketRepo;
 		private readonly IUnitOfWork _unitofwork;
-		
+		private readonly IPaymentServices _paymentServices;
 
-		public OrderServices(IBasketRepositry basketRepo,IUnitOfWork unitofwork
+		public OrderServices(IBasketRepositry basketRepo,IUnitOfWork unitofwork,IPaymentServices paymentServices
 			)
         {
 			_basketRepo = basketRepo;
              _unitofwork = unitofwork;
+			_paymentServices = paymentServices;
 		}
         public async Task<Order?> CreateOrderAsync(string BuyerEmail, string BasketId, Address ShippingAddress, int deliveryMethodId)
 		{
@@ -41,12 +42,24 @@ namespace Talabat.Services.OrderServices
 			var Subtotal= orderItems.Sum(item => item.Price*item.Quntity);
 
 			var deliveryMethods = await _unitofwork.Repositry <DeliveryMethod >().GetAsync(deliveryMethodId);
+			var orderRepo = _unitofwork.Repositry<Order>();
+			var spec = new OrderSpcifications(basket?.PaymentIntentId);
+			var existingOrder = await orderRepo.GetAsyncWithSpec(spec);
+			if (existingOrder != null)
+			{
+				orderRepo.Delete(existingOrder);
+				await _paymentServices.CreateOrUpdatePaymentIntent(BasketId);
+			}
+
+			
+			
 			var order = new Order(
 				buyerEmail: BuyerEmail,
 			  shippingAddress: ShippingAddress,
 			   deliverymethod: deliveryMethods,
 				Item: orderItems,
-				subtotal: Subtotal
+				subtotal: Subtotal,
+				paymentIntentId:basket?.PaymentIntentId??""
 
 				);
 

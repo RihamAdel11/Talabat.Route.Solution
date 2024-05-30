@@ -16,7 +16,7 @@ namespace Talabat.Core.Entities.Order_Aggregate
             
         }
         public Order(string buyerEmail,Address shippingAddress,DeliveryMethod ?deliverymethod, ICollection<OrderItem> Item,
-			decimal subtotal)
+			decimal subtotal,string paymentIntentId)
         {
 			buyerEmail = BuyerEmail;
 			shippingAddress = ShippingAddress;
@@ -24,6 +24,7 @@ namespace Talabat.Core.Entities.Order_Aggregate
 			Item = Items;
 
 			subtotal = SubTotal;
+			PaymentIntendId = paymentIntentId;
 
 
 		}
