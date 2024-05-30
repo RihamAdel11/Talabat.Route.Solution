@@ -8,6 +8,7 @@ using Talabat.Route.APIs.Helpers;
 using Talabat.Core;
 using Talabat.Core.Services.Contract;
 using Talabat.Services.OrderServices;
+using Talabat.Services.PaymentServices;
 
 
 namespace Talabat.Route.APIs.Extentions
@@ -16,6 +17,7 @@ namespace Talabat.Route.APIs.Extentions
     {
         public static IServiceCollection  AddAplicationServices( this IServiceCollection Services)
 		{
+			Services.AddScoped(typeof(IPaymentServices), typeof(PaymentServices));
 			Services.AddScoped(typeof(IOrderServices), typeof(OrderServices));
 			Services.AddScoped(typeof(IProductServices ), typeof(IProductServices ));
 			Services.AddScoped(typeof(IUnitOfWork ),typeof(UnitOfWork ));
