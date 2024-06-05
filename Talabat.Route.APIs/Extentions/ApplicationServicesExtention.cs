@@ -12,6 +12,7 @@ using Talabat.Services.PaymentServices;
 using Stripe;
 using Talabat.Services.CacheService;
 using Talabat.Services.AuthServices;
+using Talabat.Services.ProductServices;
 
 
 namespace Talabat.Route.APIs.Extentions
@@ -23,7 +24,7 @@ namespace Talabat.Route.APIs.Extentions
 			Services.AddSingleton(typeof(IResponseCacheService), typeof(ResponseCacheService));
 			Services.AddScoped(typeof(IPaymentServices), typeof(PaymentServices));
 			Services.AddScoped(typeof(IOrderServices), typeof(OrderServices));
-			Services.AddScoped(typeof(IProductServices ), typeof(IProductServices ));
+			Services.AddScoped(typeof(IProductServices ), typeof(ProductServices));
 			Services.AddScoped(typeof(IUnitOfWork ),typeof(UnitOfWork ));
 			Services.AddScoped<IBasketRepositry, BasketRepositry>();
 			Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
