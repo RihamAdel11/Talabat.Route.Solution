@@ -9,27 +9,27 @@ using Talabat.Core.Services.Contract;
 
 namespace Talabat.Services.CacheService
 {
-	public class ResponseCacheService : IResponseCacheServic
+	public class ResponseCacheService : IResponseCacheService
 	{
 		private readonly IDatabase _database;
 		public ResponseCacheService(IConnectionMultiplexer redis)
 		{
 			_database = redis.GetDatabase();
-
 		}
-		public Task CacheResponseAsync(string Key, object Response, TimeSpan timeToLive)
+		public async Task CacheResponseAsync(string key, object Response, TimeSpan timeToLive)
 		{
-			if (Response is null) return ;
+			if (Response is null) return;
 
-			var serializeOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-			var serializedResponse = JsonSerializer.Serialize(Response, serializeOptions);
+			var serializedOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-			await _database.StringSetAsync(Key, serializedResponse, timeToLive);
+			var serializedResponse = JsonSerializer.Serialize(Response);
+
+			await _database.StringSetAsync(key, serializedResponse, timeToLive);
 		}
 
-		public Task<string?> GetCachedResponseAsync(string Key)
+		public async Task<string?> GetCacheResponseAsync(string key)
 		{
-			var response = await _database.StringGetAsync(Key);
+			var response = await _database.StringGetAsync(key);
 
 			if (response.IsNullOrEmpty) return null;
 

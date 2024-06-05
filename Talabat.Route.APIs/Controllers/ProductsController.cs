@@ -16,7 +16,7 @@ namespace Talabat.Route.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : BaseAPIController
+    public class ProductsController : BaseAPIController
     {
         //      private readonly IGenericRepositry<Product> _productRepo;
         private readonly IProductServices _productServices;
@@ -24,7 +24,7 @@ namespace Talabat.Route.APIs.Controllers
   //      private readonly IGenericRepositry<ProductCategory> _categoriesRepo;
 		//private readonly IGenericRepositry<ProductBrand> _brandRepo;
 
-		public ProductController(IProductServices productServices
+		public ProductsController(IProductServices productServices
 		, IMapper mapper)
         {
            
@@ -34,6 +34,7 @@ namespace Talabat.Route.APIs.Controllers
         }
         [HttpGet]
         [Authorize]
+		//[Authorize(AuthenticationSchemes ="Bearer")]
 		[CachedAttribute(600)]
 		public async Task<ActionResult<Pagination <ProductToReturn >>> GetProducts([FromQuery] ProductSpecParams specparams)
         {

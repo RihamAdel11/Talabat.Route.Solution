@@ -11,6 +11,7 @@ using Talabat.Services.OrderServices;
 using Talabat.Services.PaymentServices;
 using Stripe;
 using Talabat.Services.CacheService;
+using Talabat.Services.AuthServices;
 
 
 namespace Talabat.Route.APIs.Extentions
@@ -27,7 +28,8 @@ namespace Talabat.Route.APIs.Extentions
 			Services.AddScoped<IBasketRepositry, BasketRepositry>();
 			Services.AddScoped(typeof(IGenericRepositry<>), typeof(GenericRepositry<>));
             Services.AddAutoMapper(typeof(MappingProfile).Assembly);
-            Services.Configure<ApiBehaviorOptions>(options =>
+			Services.AddScoped(typeof(IAuthServices), typeof(AuthService));
+			Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (actionContext) =>
                 {

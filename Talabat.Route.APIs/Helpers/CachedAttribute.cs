@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text;
+using Talabat.Core.Services.Contract;
 
 namespace Talabat.Route.APIs.Helpers
 {
@@ -22,7 +23,7 @@ namespace Talabat.Route.APIs.Helpers
 
 			var response = await responseCacheService.GetCacheResponseAsync(cacheKey);
 
-			if (string.IsNullOrEmpty(response))
+			if (!string.IsNullOrEmpty(response))
 			{
 				var result = new ContentResult()
 				{
@@ -47,12 +48,14 @@ namespace Talabat.Route.APIs.Helpers
 
 			keyBuilder.Append(request.Path); // /api/product
 
-			foreach (var (key, value) in request.Query)
+			foreach (var (key, value) in request.Query.OrderBy(X => X.Key))
 			{
 				keyBuilder.Append($"|{key}-{value}");
 			}
 			return keyBuilder.ToString();
 		}
+
+
 	}
 }
 
